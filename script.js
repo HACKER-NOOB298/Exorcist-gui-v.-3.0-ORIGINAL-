@@ -1,31 +1,28 @@
-// --- SISTEMA DE ÁUDIO MAGNA V3.0 ---
 let playerMusica = new Audio();
 let synth = window.speechSynthesis;
 let utteranceAtual = null;
 let vozes = [];
 
-// Estado Global
-let modoAtual = null; // 'mp3' ou 'tts'
+let modoAtual = null; 
 let textoAtual = "";
 let arquivoAtual = "";
 let loopsTotais = 1;
 let loopsExecutados = 0;
 let isPausado = false;
 
-// Inicialização
-window.onload = () => { carregarVozes(); };
+window.onload = () => { 
+    carregarVozes(); 
+    const salvo = localStorage.getItem('tema_preferido');
+    if(salvo) mudarTema(salvo);
+};
 synth.onvoiceschanged = carregarVozes;
 
-function carregarVozes() {
-    vozes = synth.getVoices();
-}
+function carregarVozes() { vozes = synth.getVoices(); }
 
-function toggleMenu() {
-    document.getElementById('sidebar').classList.toggle('closed');
-}
+function toggleMenu() { document.getElementById('sidebar').classList.toggle('closed'); }
 
 function navegar(idTela) {
-    controlarAudio('stop'); // Segurança: para tudo ao trocar de tela
+    controlarAudio('stop');
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(idTela).classList.add('active');
@@ -37,134 +34,86 @@ function navegar(idTela) {
     if(idTela === 'dicionario') renderizarDicionario(dicionarioDB);
 }
 
-// --- FUNÇÕES DE CONTROLE GLOBAL ---
+function mudarTema(tema) {
+    document.body.classList.remove('theme-magna', 'theme-classic', 'theme-dark');
+    document.body.classList.add('theme-' + tema);
+    localStorage.setItem('tema_preferido', tema);
+    atualizarStatus("Tema: " + tema.toUpperCase());
+}
+
 function configurarLoop() {
     let input = prompt("Quantas vezes deseja repetir a oração?", "1");
     let num = parseInt(input);
     if (!isNaN(num) && num > 0) {
         loopsTotais = num;
-        atualizarStatus(`Repetição configurada: ${num}x`);
+        atualizarStatus(`Repetição: ${num}x`);
     } else {
-        alert("Número inválido. Mantido 1x.");
         loopsTotais = 1;
     }
 }
 
-function atualizarStatus(msg) {
-    document.getElementById('status-display').innerText = msg;
-}
+function atualizarStatus(msg) { document.getElementById('status-display').innerText = msg; }
 
 function controlarAudio(acao) {
     if (acao === 'stop') {
-        synth.cancel();
-        playerMusica.pause();
-        playerMusica.currentTime = 0;
-        loopsExecutados = 0;
-        isPausado = false;
-        modoAtual = null;
-        atualizarStatus("Parado");
-        return;
+        synth.cancel(); playerMusica.pause(); playerMusica.currentTime = 0;
+        loopsExecutados = 0; isPausado = false; modoAtual = null;
+        atualizarStatus("Parado"); return;
     }
-
     if (acao === 'pause') {
         if (modoAtual === 'tts') synth.pause();
         if (modoAtual === 'mp3') playerMusica.pause();
-        isPausado = true;
-        atualizarStatus("Pausado");
+        isPausado = true; atualizarStatus("Pausado");
     }
-
     if (acao === 'resume') {
         if (isPausado) {
             if (modoAtual === 'tts') synth.resume();
             if (modoAtual === 'mp3') playerMusica.play();
-            isPausado = false;
-            atualizarStatus("Reproduzindo...");
+            isPausado = false; atualizarStatus("Reproduzindo...");
         }
     }
 }
 
-// --- FALA SINTÉTICA (TTS) ---
 function falarPalavra(texto) {
-    // Usado para botões rápidos do Início e Dicionário (sem loop)
     controlarAudio('stop');
     const u = new SpeechSynthesisUtterance(texto);
     const v = vozes.find(v => v.lang.includes('it-IT')) || vozes.find(v => v.lang.includes('es-ES'));
     if (v) u.voice = v;
-    u.rate = 0.8;
-    synth.speak(u);
+    u.rate = 0.8; synth.speak(u);
 }
 
 function iniciarTTS(btnElement) {
     controlarAudio('stop'); 
-    // Captura o texto do elemento <p class="latin"> acima dos botões
     textoAtual = btnElement.parentElement.previousElementSibling.innerText;
-    modoAtual = 'tts';
-    loopsExecutados = 0;
-    
-    tocarTTSLoop();
+    modoAtual = 'tts'; loopsExecutados = 0; tocarTTSLoop();
 }
 
 function tocarTTSLoop() {
-    if (loopsExecutados >= loopsTotais) {
-        atualizarStatus("Ciclo Concluído");
-        return;
-    }
-
+    if (loopsExecutados >= loopsTotais) return;
     loopsExecutados++;
     atualizarStatus(`Recitando ${loopsExecutados}/${loopsTotais}`);
-
     utteranceAtual = new SpeechSynthesisUtterance(textoAtual);
     const vozLatina = vozes.find(v => v.lang.includes('it-IT')) || vozes.find(v => v.lang.includes('es-ES'));
     if (vozLatina) utteranceAtual.voice = vozLatina;
     utteranceAtual.rate = 0.8;
-
-    utteranceAtual.onend = () => {
-        if (!isPausado && loopsExecutados < loopsTotais) {
-            tocarTTSLoop(); // Próximo loop
-        } else if (loopsExecutados >= loopsTotais) {
-            atualizarStatus("Finalizado");
-        }
-    };
-
+    utteranceAtual.onend = () => { if (loopsExecutados < loopsTotais) tocarTTSLoop(); };
     synth.speak(utteranceAtual);
 }
 
-// --- MÚSICA (MP3) ---
 function iniciarMusica(arquivo) {
-    controlarAudio('stop');
-    arquivoAtual = arquivo;
-    modoAtual = 'mp3';
-    loopsExecutados = 0;
-    
-    tocarMP3Loop();
+    controlarAudio('stop'); arquivoAtual = arquivo; modoAtual = 'mp3';
+    loopsExecutados = 0; tocarMP3Loop();
 }
 
 function tocarMP3Loop() {
-    if (loopsExecutados >= loopsTotais) {
-        atualizarStatus("Ciclo Concluído");
-        return;
-    }
-
+    if (loopsExecutados >= loopsTotais) return;
     loopsExecutados++;
     atualizarStatus(`Cantando ${loopsExecutados}/${loopsTotais}`);
-
     playerMusica.src = "mp3/" + arquivoAtual;
-    
-    playerMusica.onended = () => {
-        if (loopsExecutados < loopsTotais) {
-            tocarMP3Loop();
-        } else {
-            atualizarStatus("Finalizado");
-        }
-    };
-
-    playerMusica.play().catch(e => {
-        alert("MP3 não encontrado: " + arquivoAtual);
-        atualizarStatus("Erro MP3");
-    });
+    playerMusica.onended = () => { if (loopsExecutados < loopsTotais) tocarMP3Loop(); };
+    playerMusica.play().catch(() => atualizarStatus("Erro MP3"));
 }
 
-// --- DICIONÁRIO (+40 PALAVRAS) ---
 const dicionarioDB = [
     { latin: "Absolutio", pt: "Absolvição" },
     { latin: "Adsum", pt: "Aqui estou" },
