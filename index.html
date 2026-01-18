@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schola Exorcistae - Codex v3.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-cross"></i>
+                <h2>VADE MECUM</h2>
+            </div>
+            
+            <nav>
+                <button class="nav-btn active" onclick="navegar('inicio')"><i class="fa-solid fa-eye"></i> Início</button>
+                <button class="nav-btn" onclick="navegar('oracoes')"><i class="fa-solid fa-scroll"></i> Orações</button>
+                <button class="nav-btn" onclick="navegar('dicionario')"><i class="fa-solid fa-book-bible"></i> Dicionário (+40)</button>
+            </nav>
+
+            <div class="audio-panel">
+                <div id="status-display">Sistema Pronto</div>
+                <div class="controls-row">
+                    <button onclick="controlarAudio('pause')" title="Pausar"><i class="fa-solid fa-pause"></i></button>
+                    <button onclick="controlarAudio('resume')" title="Continuar"><i class="fa-solid fa-play"></i></button>
+                    <button onclick="controlarAudio('stop')" title="Parar/Zerar"><i class="fa-solid fa-stop"></i></button>
+                </div>
+            </div>
+        </aside>
+
+        <main id="main-content">
+            
+            <section id="inicio" class="content-section active">
+                <div class="version-alert">
+                    <strong>Versão 2.5:</strong> 
+                    <a href="https://github.com/HACKER-NOOB298/Exorcist-gui-v.-2.5-ORIGINAL-" target="_blank">Acessar versão clássica no GitHub</a>
+                </div>
+
+                <h1>Guia de Estudos & Combate</h1>
+                
+                <div class="prayer-container" style="text-align: center;">
+                    <p>Bem-vindo à <strong>Versão 3.0 Magna</strong>. Sistema de áudio expandido com repetição e novas orações.</p>
+                </div>
+
+                <div class="tutorial-grid">
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-ear-listen"></i> Regras de Ouro</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li><strong>AE / OE = "É"</strong> (Caelum -> Tchélum)</li>
+                            <li><strong>C + E/I = "TCH"</strong> (Crucis -> Crútchis)</li>
+                            <li><strong>TI + Vogal = "TSI"</strong> (Gratia -> Grátsia)</li>
+                            <li><strong>J = "I"</strong> (Jesus -> Iesus)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-bolt"></i> Vocabulário de Comando</h3>
+                        <div class="quick-vocab">
+                            <button class="btn-sm-vocab" onclick="falarPalavra('Exorcizamus te')">Exorcizamus</button>
+                            <button class="btn-sm-vocab" onclick="falarPalavra('Vade Retro Satana')">Vade Retro</button>
+                            <button class="btn-sm-vocab" onclick="falarPalavra('Imperat tibi')">Imperat Tibi</button>
+                            <button class="btn-sm-vocab" onclick="falarPalavra('Maledicte')">Maledicte</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prayer-container" style="margin-top: 20px;">
+                    <h3><i class="fa-solid fa-book-open"></i> Verbo Ser (Esse) - Autoridade</h3>
+                    <div class="btn-group">
+                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Ego sum')">Ego sum (Eu sou)</button>
+                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Tu es')">Tu es (Tu és)</button>
+                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Deus est')">Deus est (Deus é)</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="oracoes" class="content-section">
+                <h1>Liber Precum (Orações)</h1>
+
+                <div class="prayer-container">
+                    <h2>Sancte Michael Archangele</h2>
+                    <p class="latin">Sancte Michael Archangele, defende nos in praelio, contra nequitiam et insidias diaboli esto praesidium. Imperet illi Deus, supplices deprecamur: tuque, Princeps militiae caelestis, Satanam aliosque spiritus malignos, qui ad perditionem animarum pervagantur in mundo, divina virtute, in infernum detrude. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('miguel.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Responsorium (Si Quaeris)</h2>
+                    <p class="latin">Si quaeris miracula, mors, error, calamitas, daemon, lepra fugiunt, aegri surgunt sani. Cedunt mare, vincula, membra, resque perditas petunt et accipiunt juvenes et cani. Pereunt pericula, cessat et necessitas, narrent hi qui sentiunt, dicant Paduani. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('antonio.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Signum Crucis</h2>
+                    <p class="latin">In nomine Patris, et Filii, et Spiritus Sancti. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('sinal.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Pater Noster</h2>
+                    <p class="latin">Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('pater.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Ave Maria</h2>
+                    <p class="latin">Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('ave.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Gloria Patri</h2>
+                    <p class="latin">Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('gloria.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Sancte Angele</h2>
+                    <p class="latin">Angele Dei, qui custos es mei, me, tibi commissum pietate superna, illumina, custodi, rege et guberna. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('angele.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Symbolum Apostolorum (Credo)</h2>
+                    <p class="latin">Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('credo.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
+                    <h2>Crux Sacra</h2>
+                    <p class="latin">Crux Sacra Sit Mihi Lux! Non Draco Sit Mihi Dux! Vade Retro Satana! Nunquam Suade Mihi Vana! Sunt Mala Quae Libas! Ipse Venena Bibas! Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('saobento.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dicionario" class="content-section">
+                <h1>Magnum Thesaurus</h1>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Pesquisar termo..." onkeyup="pesquisar()">
+                </div>
+                <div id="lista-palavras"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
