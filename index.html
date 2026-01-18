@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schola Exorcistae - Codex v3.0</title>
+    <title>Schola Exorcistae - Codex v3.0 Magna</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="theme-magna">
 
     <button class="menu-toggle" onclick="toggleMenu()">
         <i class="fa-solid fa-bars"></i>
@@ -24,6 +24,7 @@
                 <button class="nav-btn active" onclick="navegar('inicio')"><i class="fa-solid fa-eye"></i> Início</button>
                 <button class="nav-btn" onclick="navegar('oracoes')"><i class="fa-solid fa-scroll"></i> Orações</button>
                 <button class="nav-btn" onclick="navegar('dicionario')"><i class="fa-solid fa-book-bible"></i> Dicionário (+40)</button>
+                <button class="nav-btn" onclick="navegar('config')"><i class="fa-solid fa-gear"></i> Configurações</button>
             </nav>
 
             <div class="audio-panel">
@@ -40,14 +41,13 @@
             
             <section id="inicio" class="content-section active">
                 <div class="version-alert">
-                    <strong>Versão 2.5:</strong> 
-                    <a href="https://github.com/HACKER-NOOB298/Exorcist-gui-v.-2.5-ORIGINAL-" target="_blank">Acessar versão "mais simples" no GitHub</a>
+                    <strong>Versão 3.0 Magna:</strong> Sistema Original de Alta Autoridade.
                 </div>
 
                 <h1>Guia de Estudos & Combate</h1>
                 
                 <div class="prayer-container" style="text-align: center;">
-                    <p>Bem-vindo à <strong>Versão 3.0 Magna, (ORIGINAL!)</strong>. Sistema de áudio expandido com repetição e novas orações.</p>
+                    <p>Bem-vindo à <strong>Versão 3.0 Magna (ORIGINAL!)</strong>. Sistema de áudio expandido com repetição e novas orações.</p>
                 </div>
 
                 <div class="tutorial-grid">
@@ -86,6 +86,16 @@
                 <h1>Liber Precum (Orações)</h1>
 
                 <div class="prayer-container">
+                    <h2>Signum Crucis</h2>
+                    <p class="latin">In nomine Patris, et Filii, et Spiritus Sancti. Amen.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('sinal.mp3')">🎶 Cantar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container">
                     <h2>Sancte Michael Archangele</h2>
                     <p class="latin">Sancte Michael Archangele, defende nos in praelio, contra nequitiam et insidias diaboli esto praesidium. Imperet illi Deus, supplices deprecamur: tuque, Princeps militiae caelestis, Satanam aliosque spiritus malignos, qui ad perditionem animarum pervagantur in mundo, divina virtute, in infernum detrude. Amen.</p>
                     <div class="btn-group">
@@ -101,16 +111,6 @@
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('antonio.mp3')">🎶 Cantar</button>
-                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
-                    </div>
-                </div>
-
-                <div class="prayer-container">
-                    <h2>Signum Crucis</h2>
-                    <p class="latin">In nomine Patris, et Filii, et Spiritus Sancti. Amen.</p>
-                    <div class="btn-group">
-                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
-                        <button class="btn-music" onclick="iniciarMusica('sinal.mp3')">🎶 Cantar</button>
                         <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
                     </div>
                 </div>
@@ -184,10 +184,22 @@
                 <div id="lista-palavras"></div>
             </section>
 
+            <section id="config" class="content-section">
+                <h1>Configurações</h1>
+                <div class="prayer-container">
+                    <h3><i class="fa-solid fa-palette"></i> Temas Visuais</h3>
+                    <p>Escolha a aparência do Codex:</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="mudarTema('magna')">Magna (Ouro)</button>
+                        <button class="btn-play" style="border-color: #8b0000; color: #8b0000;" onclick="mudarTema('classic')">Clássico (Rubro)</button>
+                        <button class="btn-play" style="border-color: #555; color: #ccc;" onclick="mudarTema('dark')">Escuro (Fosco)</button>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
