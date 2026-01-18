@@ -4,52 +4,48 @@
     --gold: #d4af37;
     --red: #8b0000;
     --purple: #6a0dad;
-    --blue: #004d99; /* Cor do botão de repetir */
+    --blue: #004d99;
     --text: #e0e0e0;
     --sidebar-w: 260px;
 }
 
+/* Temas Dinâmicos */
+.theme-classic { --gold: #8b0000; }
+.theme-dark { --gold: #555; }
+
 body { margin: 0; font-family: 'Georgia', serif; background: var(--bg-dark); color: var(--text); overflow: hidden; }
 .app-container { display: flex; height: 100vh; }
 
-/* SIDEBAR & CRUZ V2.0 */
+/* SIDEBAR */
 .sidebar {
     width: var(--sidebar-w); background: #000; border-right: 2px solid var(--gold);
     padding: 20px; transition: 0.4s ease; display: flex; flex-direction: column; z-index: 100;
 }
 .sidebar.closed { margin-left: calc(-1 * var(--sidebar-w) - 40px); }
 
-/* LOGO ESTILO OURO (V2.0/3.0) */
-.logo { text-align: center; margin: 40px 0; color: var(--gold); }
+/* LOGO - SEMPRE OURO */
+.logo { text-align: center; margin: 40px 0; color: var(--gold) !important; }
 .logo i { 
-    font-size: 3rem; /* Tamanho da cruz */
+    font-size: 3rem; 
     display: block; 
     margin-bottom: 15px; 
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4); 
+    color: var(--gold) !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.6); 
 }
-.logo h2 { 
-    font-size: 1.4rem; 
-    margin: 0; 
-    text-transform: uppercase; 
-    letter-spacing: 2px; 
-}
+.logo h2 { font-size: 1.4rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: var(--gold) !important; }
 
 /* NAVEGAÇÃO */
 .nav-btn {
     background: none; border: none; color: #888; width: 100%; text-align: left;
     padding: 15px; cursor: pointer; border-radius: 5px; margin-bottom: 5px;
-    display: flex; align-items: center; gap: 10px; font-size: 1.1rem;
+    display: flex; align-items: center; gap: 10px; font-size: 1.1rem; transition: 0.3s;
 }
-.nav-btn.active, .nav-btn:hover { background: var(--gold); color: #000; font-weight: bold; }
+.nav-btn.active, .nav-btn:hover { background: var(--gold) !important; color: #000 !important; font-weight: bold; }
 
-/* PAINEL DE AUDIO (FIXO) */
+/* AUDIO PANEL */
 .audio-panel {
-    margin-top: auto;
-    background: #111;
-    border: 1px solid var(--gold);
-    border-radius: 5px;
-    padding: 10px;
-    text-align: center;
+    margin-top: auto; background: #111; border: 1px solid var(--gold);
+    border-radius: 5px; padding: 10px; text-align: center;
 }
 #status-display { font-size: 0.8rem; color: var(--gold); margin-bottom: 8px; font-weight: bold; }
 .controls-row { display: flex; gap: 5px; justify-content: center; }
@@ -64,47 +60,33 @@ main { flex: 1; padding: 60px 40px; overflow-y: auto; background: radial-gradien
 .content-section.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ELEMENTOS DO INÍCIO */
-.version-alert {
-    background: rgba(139, 0, 0, 0.2); border: 1px solid var(--red); padding: 15px; 
-    text-align: center; border-radius: 8px; margin-bottom: 25px;
-}
-.version-alert a { color: var(--gold); font-weight: bold; text-decoration: underline; }
+.version-alert { background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 25px; }
 
 .tutorial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
 .card-info { background: var(--bg-panel); padding: 20px; border: 1px solid #333; border-radius: 5px; }
 .card-info h3 { color: var(--gold); margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 5px;}
-.quick-vocab { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* ORAÇÕES */
-.prayer-container { background: var(--bg-panel); padding: 25px; margin-bottom: 25px; border-left: 5px solid var(--gold); border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+.prayer-container { background: var(--bg-panel); padding: 25px; margin-bottom: 25px; border-left: 5px solid var(--gold); border-radius: 4px; }
 .latin { font-style: italic; font-size: 1.25rem; color: #dcdcdc; line-height: 1.6; margin-bottom: 20px; }
 
-/* GRUPO DE BOTÕES */
+/* BOTÕES COLORIDOS */
 .btn-group { display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid #333; padding-top: 15px; margin-top: 15px; }
-.btn-play, .btn-music, .btn-loop, .btn-sm-vocab {
-    padding: 10px 15px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; flex: 1; color: white; min-width: 100px; transition: 0.3s;
-    display: flex; align-items: center; justify-content: center; gap: 5px;
-}
-.btn-play { background: #222; border: 1px solid var(--gold); color: var(--gold); }
+.btn-play { background: #222; border: 1px solid var(--gold); color: var(--gold); padding: 10px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; flex: 1; }
 .btn-play:hover { background: var(--gold); color: black; }
 
-.btn-music { background: #1a052b; border: 1px solid var(--purple); color: #d8b4fe; }
+.btn-music { background: #1a052b; border: 1px solid var(--purple); color: #d8b4fe; padding: 10px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; flex: 1; }
 .btn-music:hover { background: var(--purple); color: white; }
 
-.btn-loop { background: #05182b; border: 1px solid var(--blue); color: #8ecae6; }
+.btn-loop { background: #05182b; border: 1px solid var(--blue); color: #8ecae6; padding: 10px 15px; cursor: pointer; font-weight: bold; border-radius: 4px; flex: 1; }
 .btn-loop:hover { background: var(--blue); color: white; }
 
-.btn-sm-vocab { background: #111; color: var(--gold); border: 1px solid #444; flex: 1; }
-.btn-sm-vocab:hover { background: var(--red); }
+.btn-sm-vocab { background: #111; color: var(--gold); border: 1px solid #444; flex: 1; padding: 10px; cursor: pointer; font-weight: bold; }
+.btn-sm-vocab:hover { background: var(--gold) !important; color: black !important; }
 
 /* DICIONARIO */
-.search-box input { width: 100%; padding: 15px; background: #000; border: 1px solid var(--gold); color: white; border-radius: 4px; margin-bottom: 20px; font-size: 1.1rem; }
+.search-box input { width: 100%; padding: 15px; background: #000; border: 1px solid var(--gold); color: white; border-radius: 4px; margin-bottom: 20px; }
 .dict-item { padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
 
 /* MOBILE */
 .menu-toggle { position: fixed; top: 15px; left: 15px; z-index: 200; background: var(--gold); color: black; border: none; padding: 10px; cursor: pointer; border-radius: 4px; }
-@media (max-width: 768px) {
-    .sidebar { width: 100%; position: absolute; height: auto; min-height: 100vh; }
-    main { padding: 70px 20px; }
-}
