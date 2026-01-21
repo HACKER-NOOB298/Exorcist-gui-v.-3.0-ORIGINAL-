@@ -1,26 +1,37 @@
+// --- SISTEMA DE ÁUDIO MAGNA V3.0 (COM SUPORTE A BACKGROUND/CALLS) ---
 let playerMusica = new Audio();
 let synth = window.speechSynthesis;
 let utteranceAtual = null;
 let vozes = [];
 
-let modoAtual = null; 
+// Variáveis de Estado
+let modoAtual = null; // 'mp3' ou 'tts'
 let textoAtual = "";
 let arquivoAtual = "";
 let loopsTotais = 1;
 let loopsExecutados = 0;
-let isPausado = false;
+let isPausado = false; // Controle manual do usuário
+let watcherInterval = null; // O "Vigia" que força o áudio
 
+// --- INICIALIZAÇÃO ---
 window.onload = () => { 
     carregarVozes(); 
     const salvo = localStorage.getItem('tema_preferido');
     if(salvo) mudarTema(salvo);
+
+    // Configuração para Mobile (iOS/Android) não bloquear o som
+    playerMusica.setAttribute('playsinline', 'true');
+    playerMusica.setAttribute('webkit-playsinline', 'true');
+    playerMusica.preload = 'auto';
 };
+
 synth.onvoiceschanged = carregarVozes;
 
 function carregarVozes() { vozes = synth.getVoices(); }
 
 function toggleMenu() { document.getElementById('sidebar').classList.toggle('closed'); }
 
+// --- NAVEGAÇÃO ---
 function navegar(idTela) {
     controlarAudio('stop');
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -34,6 +45,7 @@ function navegar(idTela) {
     if(idTela === 'dicionario') renderizarDicionario(dicionarioDB);
 }
 
+// --- CONTROLE DE TEMA ---
 function mudarTema(tema) {
     document.body.classList.remove('theme-magna', 'theme-classic', 'theme-dark');
     document.body.classList.add('theme-' + tema);
@@ -41,12 +53,13 @@ function mudarTema(tema) {
     atualizarStatus("Tema: " + tema.toUpperCase());
 }
 
+// --- CONTROLE DE LOOP ---
 function configurarLoop() {
     let input = prompt("Quantas vezes deseja repetir a oração?", "1");
     let num = parseInt(input);
     if (!isNaN(num) && num > 0) {
         loopsTotais = num;
-        atualizarStatus(`Repetição: ${num}x`);
+        atualizarStatus(`Repetição configurada: ${num}x`);
     } else {
         loopsTotais = 1;
     }
@@ -54,26 +67,66 @@ function configurarLoop() {
 
 function atualizarStatus(msg) { document.getElementById('status-display').innerText = msg; }
 
+// --- CENTRAL DE CONTROLE DE ÁUDIO ---
 function controlarAudio(acao) {
     if (acao === 'stop') {
-        synth.cancel(); playerMusica.pause(); playerMusica.currentTime = 0;
-        loopsExecutados = 0; isPausado = false; modoAtual = null;
-        atualizarStatus("Parado"); return;
+        pararVigia(); // Para de forçar o áudio
+        synth.cancel(); 
+        playerMusica.pause(); 
+        playerMusica.currentTime = 0;
+        loopsExecutados = 0; 
+        isPausado = false; 
+        modoAtual = null;
+        atualizarStatus("Parado"); 
+        
+        // Limpa a notificação de mídia do celular
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = "none";
+        }
+        return;
     }
+
     if (acao === 'pause') {
+        isPausado = true; // Usuário pediu pause explicitamente
         if (modoAtual === 'tts') synth.pause();
         if (modoAtual === 'mp3') playerMusica.pause();
-        isPausado = true; atualizarStatus("Pausado");
+        atualizarStatus("Pausado");
+        if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused";
     }
+
     if (acao === 'resume') {
         if (isPausado) {
+            isPausado = false;
             if (modoAtual === 'tts') synth.resume();
-            if (modoAtual === 'mp3') playerMusica.play();
-            isPausado = false; atualizarStatus("Reproduzindo...");
+            if (modoAtual === 'mp3') {
+                playerMusica.play();
+                iniciarVigia(); // Reativa a proteção contra pausas do sistema
+            }
+            atualizarStatus("Reproduzindo...");
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing";
         }
     }
 }
 
+// --- O "VIGIA" (SISTEMA ANTI-INTERRUPÇÃO) ---
+// Isso força o áudio a voltar se o WhatsApp ou Ligação tentar pausar
+function iniciarVigia() {
+    if (watcherInterval) clearInterval(watcherInterval);
+    
+    watcherInterval = setInterval(() => {
+        // Se NÃO foi pausado pelo usuário, mas o player tá pausado (obra do sistema/ligação)
+        if (!isPausado && playerMusica.paused && modoAtual === 'mp3') {
+            console.log("Sistema tentou pausar. Forçando retorno...");
+            playerMusica.play().catch(e => console.log("Tentativa de force-play bloqueada: " + e));
+        }
+    }, 1000); // Verifica a cada 1 segundo
+}
+
+function pararVigia() {
+    if (watcherInterval) clearInterval(watcherInterval);
+}
+
+// --- TTS (VOZ DO GOOGLE) ---
 function falarPalavra(texto) {
     controlarAudio('stop');
     const u = new SpeechSynthesisUtterance(texto);
@@ -96,79 +149,74 @@ function tocarTTSLoop() {
     const vozLatina = vozes.find(v => v.lang.includes('it-IT')) || vozes.find(v => v.lang.includes('es-ES'));
     if (vozLatina) utteranceAtual.voice = vozLatina;
     utteranceAtual.rate = 0.8;
-    utteranceAtual.onend = () => { if (loopsExecutados < loopsTotais) tocarTTSLoop(); };
+    
+    // Hack para manter TTS ativo em background (O Chrome corta TTS longos)
+    let resumeInterval = setInterval(() => {
+        if (!window.speechSynthesis.speaking) clearInterval(resumeInterval);
+        else window.speechSynthesis.resume();
+    }, 14000);
+
+    utteranceAtual.onend = () => { 
+        clearInterval(resumeInterval);
+        if (loopsExecutados < loopsTotais && !isPausado) tocarTTSLoop(); 
+    };
     synth.speak(utteranceAtual);
 }
 
+// --- MP3 (MÚSICA) ---
 function iniciarMusica(arquivo) {
-    controlarAudio('stop'); arquivoAtual = arquivo; modoAtual = 'mp3';
-    loopsExecutados = 0; tocarMP3Loop();
+    controlarAudio('stop'); 
+    arquivoAtual = arquivo; 
+    modoAtual = 'mp3';
+    loopsExecutados = 0; 
+    
+    // Configura Metadados para o Celular (Importante para Calls)
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: arquivo.replace('.mp3', '').toUpperCase(),
+            artist: 'Schola Exorcistae',
+            album: 'Codex Magna v3.0',
+            artwork: [{ src: 'https://cdn-icons-png.flaticon.com/512/107/107831.png', sizes: '512x512', type: 'image/png' }]
+        });
+        
+        navigator.mediaSession.setActionHandler('play', () => controlarAudio('resume'));
+        navigator.mediaSession.setActionHandler('pause', () => controlarAudio('pause'));
+        navigator.mediaSession.setActionHandler('stop', () => controlarAudio('stop'));
+    }
+
+    tocarMP3Loop();
 }
 
 function tocarMP3Loop() {
     if (loopsExecutados >= loopsTotais) return;
     loopsExecutados++;
     atualizarStatus(`Cantando ${loopsExecutados}/${loopsTotais}`);
+    
     playerMusica.src = "mp3/" + arquivoAtual;
+    
+    // Evento se o sistema pausar
+    playerMusica.onpause = () => {
+        if (!isPausado) {
+            // Se não fui eu que pausei, foi o sistema (Ligação/Zap).
+            // O Vigia vai tentar religar em 1s, mas tentamos aqui também.
+            playerMusica.play().catch(e => console.log("Bloqueio de sistema momentâneo."));
+        }
+    };
+
     playerMusica.onended = () => { if (loopsExecutados < loopsTotais) tocarMP3Loop(); };
-    playerMusica.play().catch(() => atualizarStatus("Erro MP3"));
+    
+    playerMusica.play()
+        .then(() => iniciarVigia()) // Liga a proteção assim que começa a tocar
+        .catch(() => atualizarStatus("Erro MP3 (Toque na tela)"));
 }
 
+// --- DICIONÁRIO ---
 const dicionarioDB = [
-    { latin: "Absolutio", pt: "Absolvição" },
-    { latin: "Adsum", pt: "Aqui estou" },
-    { latin: "Agnus Dei", pt: "Cordeiro de Deus" },
-    { latin: "Altare", pt: "Altar" },
-    { latin: "Amen", pt: "Assim seja" },
-    { latin: "Angele", pt: "Anjo" },
-    { latin: "Anima", pt: "Alma" },
-    { latin: "Aqua", pt: "Água" },
-    { latin: "Basilica", pt: "Basílica" },
-    { latin: "Beatus", pt: "Bem-aventurado" },
-    { latin: "Benedictus", pt: "Bendito" },
-    { latin: "Caelum", pt: "Céu" },
-    { latin: "Caritas", pt: "Caridade" },
-    { latin: "Confiteor", pt: "Eu confesso" },
-    { latin: "Corpus Christi", pt: "Corpo de Cristo" },
-    { latin: "Credo", pt: "Eu creio" },
-    { latin: "Crux", pt: "Cruz" },
-    { latin: "Daemon", pt: "Demônio" },
-    { latin: "Deus", pt: "Deus" },
-    { latin: "Diabolus", pt: "Diabo" },
-    { latin: "Dominus", pt: "Senhor" },
-    { latin: "Ecclesia", pt: "Igreja" },
-    { latin: "Et", pt: "E" },
-    { latin: "Eucharistia", pt: "Eucaristia" },
-    { latin: "Exorcizamus", pt: "Exorcizamos" },
-    { latin: "Fides", pt: "Fé" },
-    { latin: "Filius", pt: "Filho" },
-    { latin: "Gloria", pt: "Glória" },
-    { latin: "Gratia", pt: "Graça" },
-    { latin: "Habemus", pt: "Temos" },
-    { latin: "Hostia", pt: "Hóstia / Vítima" },
-    { latin: "Infernum", pt: "Inferno" },
-    { latin: "Inri", pt: "Rei dos Judeus" },
-    { latin: "Kyrie Eleison", pt: "Senhor tende piedade" },
-    { latin: "Laudes", pt: "Louvores" },
-    { latin: "Lux", pt: "Luz" },
-    { latin: "Malo", pt: "Mal" },
-    { latin: "Mea Culpa", pt: "Minha culpa" },
-    { latin: "Miserere", pt: "Tende piedade" },
-    { latin: "Mundus", pt: "Mundo" },
-    { latin: "Omnipotens", pt: "Todo-poderoso" },
-    { latin: "Ora pro nobis", pt: "Rogai por nós" },
-    { latin: "Pater", pt: "Pai" },
-    { latin: "Pax", pt: "Paz" },
-    { latin: "Peccatum", pt: "Pecado" },
-    { latin: "Regnum", pt: "Reino" },
-    { latin: "Requiem", pt: "Repouso" },
-    { latin: "Sacra", pt: "Sagrada" },
-    { latin: "Sanctus", pt: "Santo" },
-    { latin: "Satanas", pt: "Satanás" },
-    { latin: "Spiritus", pt: "Espírito" },
-    { latin: "Vade Retro", pt: "Afasta-te" },
-    { latin: "Verbum", pt: "Verbo" },
-    { latin: "Virgo", pt: "Virgem" }
+    { latin: "Absolutio", pt: "Absolvição" }, { latin: "Adsum", pt: "Aqui estou" },
+    { latin: "Agnus Dei", pt: "Cordeiro de Deus" }, { latin: "Altare", pt: "Altar" },
+    { latin: "Caelum", pt: "Céu" }, { latin: "Daemon", pt: "Demônio" },
+    { latin: "Exorcizamus", pt: "Exorcizamos" }, { latin: "Vade Retro", pt: "Afasta-te" },
+    { latin: "Benedictus", pt: "Bendito" }, { latin: "Spiritus", pt: "Espírito" }
 ];
 
 function renderizarDicionario(lista) {
