@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schola Exorcistae - Codex v3.0 Magna</title>
+    <title>Schola Exorcistae - Codex v3.5 Magna</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -23,7 +23,8 @@
             <nav>
                 <button class="nav-btn active" onclick="navegar('inicio')"><i class="fa-solid fa-eye"></i> Início</button>
                 <button class="nav-btn" onclick="navegar('oracoes')"><i class="fa-solid fa-scroll"></i> Orações</button>
-                <button class="nav-btn" onclick="navegar('dicionario')"><i class="fa-solid fa-book-bible"></i> Dicionário (+40)</button>
+                <button class="nav-btn" onclick="navegar('dicionario')"><i class="fa-solid fa-book-bible"></i> Dicionário (+80)</button>
+                <button class="nav-btn" onclick="navegar('equipamentos')"><i class="fa-solid fa-microchip"></i> Equipamentos</button>
                 <button class="nav-btn" onclick="navegar('config')"><i class="fa-solid fa-gear"></i> Configurações</button>
             </nav>
 
@@ -41,13 +42,13 @@
             
             <section id="inicio" class="content-section active">
                 <div class="version-alert">
-                    <strong>Versão 3.0 Magna:</strong> Sistema Original de Alta Autoridade.
+                    <strong>Versão 3.5 Magna:</strong> Módulo de Tradução e Equipamentos Ativado.
                 </div>
 
                 <h1>Guia de Estudos & Combate</h1>
                 
                 <div class="prayer-container" style="text-align: center;">
-                    <p>Bem-vindo à <strong>Versão 3.0 Magna (ORIGINAL!)</strong>. Sistema de áudio expandido com repetição e novas orações.</p>
+                    <p>Bem-vindo à <strong>Versão 3.5 Magna</strong>. Use com autoridade e fé.</p>
                 </div>
 
                 <div class="tutorial-grid">
@@ -62,7 +63,7 @@
                     </div>
 
                     <div class="card-info">
-                        <h3><i class="fa-solid fa-bolt"></i> Vocabulário de Comando</h3>
+                        <h3><i class="fa-solid fa-bolt"></i> Comandos Rápidos</h3>
                         <div class="quick-vocab">
                             <button class="btn-sm-vocab" onclick="falarPalavra('Exorcizamus te')">Exorcizamus</button>
                             <button class="btn-sm-vocab" onclick="falarPalavra('Vade Retro Satana')">Vade Retro</button>
@@ -71,23 +72,18 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="prayer-container" style="margin-top: 20px;">
-                    <h3><i class="fa-solid fa-book-open"></i> Verbo Ser (Esse) - Autoridade</h3>
-                    <div class="btn-group">
-                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Ego sum')">Ego sum (Eu sou)</button>
-                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Tu es')">Tu es (Tu és)</button>
-                        <button class="btn-play" style="flex:1" onclick="falarPalavra('Deus est')">Deus est (Deus é)</button>
-                    </div>
-                </div>
             </section>
 
             <section id="oracoes" class="content-section">
                 <h1>Liber Precum (Orações)</h1>
 
                 <div class="prayer-container">
-                    <h2>Signum Crucis</h2>
+                    <div class="prayer-header">
+                        <h2>Signum Crucis</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">In nomine Patris, et Filii, et Spiritus Sancti. Amen.</p>
+                    <p class="traducao" style="display:none">Em nome do Pai, e do Filho, e do Espírito Santo. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('sinal.mp3')">🎶 Cantar</button>
@@ -96,8 +92,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Sancte Michael Archangele</h2>
+                    <div class="prayer-header">
+                        <h2>Sancte Michael</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Sancte Michael Archangele, defende nos in praelio, contra nequitiam et insidias diaboli esto praesidium. Imperet illi Deus, supplices deprecamur: tuque, Princeps militiae caelestis, Satanam aliosque spiritus malignos, qui ad perditionem animarum pervagantur in mundo, divina virtute, in infernum detrude. Amen.</p>
+                    <p class="traducao" style="display:none">São Miguel Arcanjo, defendei-nos no combate, sede o nosso refúgio contra as maldades e ciladas do demônio. Ordene-lhe Deus, instantemente o pedimos, e vós, príncipe da milícia celeste, pela virtude divina, precipitai no inferno a Satanás e aos outros espíritos malignos, que andam pelo mundo para perder as almas. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('miguel.mp3')">🎶 Cantar</button>
@@ -106,8 +106,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Responsorium (Si Quaeris)</h2>
+                    <div class="prayer-header">
+                        <h2>Responsorium</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Si quaeris miracula, mors, error, calamitas, daemon, lepra fugiunt, aegri surgunt sani. Cedunt mare, vincula, membra, resque perditas petunt et accipiunt juvenes et cani. Pereunt pericula, cessat et necessitas, narrent hi qui sentiunt, dicant Paduani. Amen.</p>
+                    <p class="traducao" style="display:none">Se milagres desejais, recuam erro e calamidade, o demônio foge, a lepra, e os doentes saram. O mar cede, as correntes quebram, recuperam-se coisas perdidas, pedem e recebem jovens e velhos. Os perigos perecem, cessa a necessidade; contem aqueles que sentem, digam os paduanos. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('antonio.mp3')">🎶 Cantar</button>
@@ -116,8 +120,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Pater Noster</h2>
+                    <div class="prayer-header">
+                        <h2>Pater Noster</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie. Et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.</p>
+                    <p class="traducao" style="display:none">Pai nosso, que estais nos céus, santificado seja o vosso nome. Venha a nós o vosso reino. Seja feita a vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje. E perdoai-nos as nossas dívidas, assim como nós perdoamos aos nossos devedores. E não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('pater.mp3')">🎶 Cantar</button>
@@ -126,8 +134,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Ave Maria</h2>
+                    <div class="prayer-header">
+                        <h2>Ave Maria</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.</p>
+                    <p class="traducao" style="display:none">Ave Maria, cheia de graça, o Senhor é convosco. Bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós, pecadores, agora e na hora de nossa morte. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('ave.mp3')">🎶 Cantar</button>
@@ -136,8 +148,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Gloria Patri</h2>
+                    <div class="prayer-header">
+                        <h2>Gloria Patri</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.</p>
+                    <p class="traducao" style="display:none">Glória ao Pai, e ao Filho, e ao Espírito Santo. Como era no princípio, agora e sempre, e pelos séculos dos séculos. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('gloria.mp3')">🎶 Cantar</button>
@@ -146,8 +162,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Sancte Angele</h2>
+                    <div class="prayer-header">
+                        <h2>Sancte Angele</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Angele Dei, qui custos es mei, me, tibi commissum pietate superna, illumina, custodi, rege et guberna. Amen.</p>
+                    <p class="traducao" style="display:none">Santo Anjo do Senhor, meu zeloso guardador, se a ti me confiou a piedade divina, sempre me rege, me guarde, me governe e me ilumine. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('angele.mp3')">🎶 Cantar</button>
@@ -156,8 +176,12 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Symbolum Apostolorum (Credo)</h2>
+                    <div class="prayer-header">
+                        <h2>Symbolum Apostolorum</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.</p>
+                    <p class="traducao" style="display:none">Creio em Deus Pai todo-poderoso, criador do céu e da terra. E em Jesus Cristo, seu único Filho, nosso Senhor, que foi concebido pelo poder do Espírito Santo, nasceu da Virgem Maria, padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu à mansão dos mortos; ressuscitou ao terceiro dia; subiu aos céus; está sentado à direita de Deus Pai todo-poderoso, de onde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo, na santa Igreja Católica, na comunhão dos santos, na remissão dos pecados, na ressurreição da carne, na vida eterna. Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('credo.mp3')">🎶 Cantar</button>
@@ -166,12 +190,89 @@
                 </div>
 
                 <div class="prayer-container">
-                    <h2>Crux Sacra</h2>
+                    <div class="prayer-header">
+                        <h2>Crux Sacra</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
                     <p class="latin">Crux Sacra Sit Mihi Lux! Non Draco Sit Mihi Dux! Vade Retro Satana! Nunquam Suade Mihi Vana! Sunt Mala Quae Libas! Ipse Venena Bibas! Amen.</p>
+                    <p class="traducao" style="display:none">A Cruz Sagrada seja minha luz! Não seja o dragão o meu guia! Retira-te, Satanás! Nunca me aconselhes coisas vãs! É mau o que tu me ofereces! Bebe tu mesmo os teus venenos! Amém.</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
                         <button class="btn-music" onclick="iniciarMusica('saobento.mp3')">🎶 Cantar</button>
                         <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+
+                <div class="prayer-container" style="border-left-color: var(--red);">
+                    <div class="prayer-header">
+                        <h2>Hoc Bellum Finio</h2>
+                        <button class="btn-trans-toggle" onclick="toggleTraducao(this)">🌐 Traduzir</button>
+                    </div>
+                    <p class="latin">Hoc bellum finio in nomine omnium angelorum Dei, omnium archangelorum et sanctorum. Abi, Satana. Redi ubi eras, in nomine Dei.</p>
+                    <p class="traducao" style="display:none">Termino esta guerra em nome de todos os anjos de Deus, de todos os arcanjos e santos. Vai-te, Satanás. Volta para onde estavas, em nome de Deus.</p>
+                    <div class="btn-group">
+                        <button class="btn-play" onclick="iniciarTTS(this)">🔊 Recitar</button>
+                        <button class="btn-music" onclick="iniciarMusica('bellum.mp3')">🎶 Tocar</button>
+                        <button class="btn-loop" onclick="configurarLoop()">🔄 Repetir...</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="equipamentos" class="content-section">
+                <h1>Arsenal Paranormal</h1>
+                <p style="color:#888; text-align:center;">Ferramentas de detecção e análise espiritual.</p>
+
+                <div class="tutorial-grid">
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-tower-broadcast"></i> EMF (K2)</h3>
+                        <p style="font-size:0.9rem; color:#ccc;">Detector de Campo Eletromagnético.</p>
+                        <div style="background:#000; padding:10px; margin-top:10px; border-radius:4px; text-align:center;">
+                            <div style="display:flex; justify-content:center; gap:5px;">
+                                <div style="width:15px; height:15px; background:green; border-radius:50%;"></div>
+                                <div style="width:15px; height:15px; background:green; border-radius:50%; opacity:0.3"></div>
+                                <div style="width:15px; height:15px; background:yellow; border-radius:50%; opacity:0.3"></div>
+                                <div style="width:15px; height:15px; background:orange; border-radius:50%; opacity:0.3"></div>
+                                <div style="width:15px; height:15px; background:red; border-radius:50%; opacity:0.3"></div>
+                            </div>
+                            <span style="display:block; margin-top:5px; color:green; font-weight:bold;">SAFE (1.5 mG)</span>
+                        </div>
+                    </div>
+
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-radio"></i> Spirit Box (SB7)</h3>
+                        <p style="font-size:0.9rem; color:#ccc;">Varredura de Rádio para E.V.P.</p>
+                        <div style="background:#111; border:1px solid #333; padding:10px; margin-top:10px; font-family:monospace; text-align:center; color:cyan;">
+                            CH: AM / SWEEP: 150ms<br>
+                            <span style="font-size:1.5rem; letter-spacing:3px;">87.5 FM</span>
+                        </div>
+                    </div>
+
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-video"></i> Câmera SLS</h3>
+                        <p style="font-size:0.9rem; color:#ccc;">Mapeamento de figuras esqueléticas.</p>
+                        <div style="background:#002200; height:60px; display:flex; align-items:center; justify-content:center; border:1px solid lime;">
+                            <i class="fa-solid fa-person" style="color:lime; font-size:1.5rem;"></i>
+                        </div>
+                    </div>
+
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-temperature-low"></i> Termômetro Laser</h3>
+                        <p style="font-size:0.9rem; color:#ccc;">Detecção de "Pontos Frios".</p>
+                        <div style="text-align:center; margin-top:10px;">
+                            <strong style="font-size:1.5rem; color:#d4af37;">21.4 °C</strong><br>
+                            <small style="color:red;"><i class="fa-solid fa-crosshairs"></i> Laser Ativo</small>
+                        </div>
+                    </div>
+
+                    <div class="card-info">
+                        <h3><i class="fa-solid fa-satellite-dish"></i> REM-Pod</h3>
+                        <p style="font-size:0.9rem; color:#ccc;">Alarme de proximidade estática.</p>
+                        <div style="display:flex; justify-content:space-around; margin-top:10px;">
+                            <div style="width:10px; height:30px; background:red; border-radius:5px; box-shadow:0 0 5px red;"></div>
+                            <div style="width:10px; height:30px; background:blue; border-radius:5px; opacity:0.3;"></div>
+                            <div style="width:10px; height:30px; background:green; border-radius:5px; opacity:0.3;"></div>
+                            <div style="width:10px; height:30px; background:yellow; border-radius:5px; opacity:0.3;"></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -188,7 +289,6 @@
                 <h1>Configurações</h1>
                 <div class="prayer-container">
                     <h3><i class="fa-solid fa-palette"></i> Temas Visuais</h3>
-                    <p>Escolha a aparência do Codex:</p>
                     <div class="btn-group">
                         <button class="btn-play" onclick="mudarTema('magna')">Magna (Ouro)</button>
                         <button class="btn-play" style="border-color: #8b0000; color: #8b0000;" onclick="mudarTema('classic')">Clássico (Rubro)</button>
