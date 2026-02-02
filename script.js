@@ -275,3 +275,4 @@ function pesquisar() {
     const f = dicionarioDB.filter(i => i.latin.toLowerCase().includes(t) || i.pt.toLowerCase().includes(t));
     renderizarDicionario(f);
 }
+
