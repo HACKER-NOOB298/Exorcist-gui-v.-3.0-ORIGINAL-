@@ -96,7 +96,151 @@ main { flex: 1; padding: 60px 40px; overflow-y: auto; background: radial-gradien
 
 /* DICIONARIO */
 .search-box input { width: 100%; padding: 15px; background: #000; border: 1px solid var(--gold); color: white; border-radius: 4px; margin-bottom: 20px; }
+.search-box input::placeholder { color: #666; }
 .dict-item { padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+
+/* EQUIPAMENTOS PARANORMAIS */
+.emf-display {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 15px;
+    background: #000;
+    border-radius: 4px;
+}
+
+.emf-bar {
+    width: 15px;
+    height: 40px;
+    border-radius: 3px;
+    background: green;
+    opacity: 0.3;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 5px currentColor;
+}
+
+.emf-label {
+    display: block;
+    margin-top: 10px;
+    color: var(--gold);
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.sb-display {
+    background: #111;
+    border: 1px solid #333;
+    padding: 10px;
+    margin-top: 10px;
+    font-family: monospace;
+    text-align: center;
+    color: cyan;
+    border-radius: 4px;
+}
+
+.sb-frequency {
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    margin: 10px 0;
+    color: #00ff00;
+}
+
+.sb-channel {
+    font-size: 0.8rem;
+    color: cyan;
+    margin-bottom: 5px;
+}
+
+.sls-screen {
+    background: #002200;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lime;
+    border-radius: 4px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sls-screen i {
+    color: lime;
+    font-size: 1.5rem;
+}
+
+.term-display {
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background: #001a00;
+    border-radius: 4px;
+}
+
+.term-valor {
+    font-size: 2rem;
+    color: #d4af37;
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
+.term-laser {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.rem-display {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    gap: 8px;
+}
+
+.rem-barra {
+    width: 10px;
+    height: 40px;
+    border-radius: 5px;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.rem-barra:nth-child(1) { background: red; }
+.rem-barra:nth-child(2) { background: blue; }
+.rem-barra:nth-child(3) { background: green; }
+.rem-barra:nth-child(4) { background: yellow; }
+
+.btn-activate-equip {
+    background: #222;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 10px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-activate-equip:hover {
+    background: var(--gold);
+    color: black;
+}
+
+.btn-activate-equip.active {
+    background: var(--gold);
+    color: black;
+    box-shadow: 0 0 10px var(--gold);
+}
 
 /* MOBILE */
 .menu-toggle { position: fixed; top: 15px; left: 15px; z-index: 200; background: var(--gold); color: black; border: none; padding: 10px; cursor: pointer; border-radius: 4px; }
+
+@media (max-width: 768px) {
+    main { padding: 60px 20px; }
+    .sidebar { width: calc(var(--sidebar-w) - 40px); }
+}
